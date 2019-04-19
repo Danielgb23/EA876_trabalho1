@@ -3,6 +3,7 @@
 
 void yyerror(char *c);
 int yylex(void);
+int i_memoria=0;
 
 %}
 
@@ -15,35 +16,47 @@ int yylex(void);
 %%
 
 PROGRAMA:
-        PROGRAMA EXPRESSAO EOL { printf("Resultado: %d\n", $2); }
+        PROGRAMA EXPRESSAO EOL {  }
         |
         ;
 
 
 EXPRESSAO:
-    INT { $$ = $1;
+    INT { 
+	//printf("@Inteiro: %d", i_memoria); 	
+	printf("	mov	r0, #%d\n", $1); 	
+	printf("	str	r0, [r13, #%d]\n\n", i_memoria); 	
+	$$ = i_memoria;
+	i_memoria+=4;
           }
 
     | OPARENT EXPRESSAO FPARENT {
-        printf("Encontrei parentesis: (%d) \n", $2);
         $$ = $2;
         }
 
-    | EXPRESSAO MULT EXPRESSAO  {
-        printf("Encontrei multiplicacao: %d * %d = %d\n", $1, $3, $1*$3);
-        $$ = $1 * $3;
+    | EXPRESSAO SOMA EXPRESSAO  {
+        $$ = $1;
+	printf("	ldr	r1, [r13, #%d]\n", $1); 	
+	printf("	ldr	r2, [r13, #%d]\n", $3); 	
+	printf("	add	r0, r1, r2\n"); 	
+	printf("	str	r0, [r13, #%d]\n\n", $1); 	
         }
 
-    | EXPRESSAO SOMA EXPRESSAO  {
-        printf("Encontrei soma: %d + %d = %d\n", $1, $3, $1+$3);
-        $$ = $1 + $3;
-        }
-    
     | EXPRESSAO MINUS EXPRESSAO  {
-        printf("Encontrei subtracao: %d - %d = %d\n", $1, $3, $1-$3);
-        $$ = $1 - $3;
+        $$ = $1;
+	printf("	ldr	r1, [r13, #%d]\n", $1); 	
+	printf("	ldr	r2, [r13, #%d]\n", $3); 	
+	printf("	sub	r0, r1, r2\n"); 	
+	printf("	str	r0, [r13, #%d]\n\n", $1); 	
         }
  
+    | EXPRESSAO MULT EXPRESSAO  {
+        $$ = $1;
+	printf("	ldr	r1, [r13, #%d]\n", $1); 	
+	printf("	ldr	r2, [r13, #%d]\n", $3); 	
+	printf("	bl	mult\n"); 	
+	printf("	str	r0, [r13, #%d]\n\n", $1); 	
+        }
     ;
 
 %%
@@ -53,7 +66,16 @@ void yyerror(char *s) {
 }
 
 int main() {
-  yyparse();
-  return 0;
+  	yyparse();
+	printf("end\n");
+	printf("mult\n");
+	printf("	mov	r0, #0\n"); 	
+	printf("mult_loop\n");
+	printf("	add	r0, r0, r1\n"); 	
+	printf("	sub	r2, r2, #1\n"); 	
+	printf("	cmp	r2, #0\n"); 	
+	printf("	bne	mult_loop\n"); 	
+	printf("	mov	pc, lr\n\n\n"); 	
+  	return 0;
 
 }
