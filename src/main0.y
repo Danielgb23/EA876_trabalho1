@@ -1,4 +1,4 @@
-
+//codigo antigo sem diretivas e com operacoes mov
 %{
 #include <stdio.h>
 
