@@ -16,7 +16,14 @@ read_dom () {
 	#le o dado na tag certa do xml de log do simulador	
 	while read_dom; do
 		if [[ $ENTITY = "register name=\"R0\"" ]]; then
-			printf "%d\n" $CONTENT
+			if (( $CONTENT < 0x80000000 )); then
+				printf "%d\n" $CONTENT
+			#se for negativo seta o resto dos bits a esquerda para imprimir negativo
+			else
+				NEGATIVE=$((~0xFFFFFFFF|($CONTENT)));
+				printf "%d\n" $NEGATIVE
+			fi
+			
 			exit
 		fi
 	done < simula.log
