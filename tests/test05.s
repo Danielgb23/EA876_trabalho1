@@ -1,78 +1,66 @@
-	mov	r0, #9
-	str	r0, [r13, #0]
-
-	mov	r0, #8
-	str	r0, [r13, #4]
-
-	ldr	r1, [r13, #0]
-	ldr	r2, [r13, #4]
+int0	dcd 9
+int1	dcd 8
+	ldr	r3, =int0
+	ldr	r1, [r3]
+	ldr	r2, =int1
+	ldr	r2, [r2]
 	add	r0, r1, r2
-	str	r0, [r13, #0]
+	str	r0, [r3]
 
-	mov	r0, #7
-	str	r0, [r13, #8]
-
-	ldr	r1, [r13, #0]
-	ldr	r2, [r13, #8]
+int2	dcd 7
+	ldr	r3, =int0
+	ldr	r1, [r3]
+	ldr	r2, =int2
+	ldr	r2, [r2]
 	add	r0, r1, r2
-	str	r0, [r13, #0]
+	str	r0, [r3]
 
-	mov	r0, #6
-	str	r0, [r13, #12]
-
-	ldr	r1, [r13, #0]
-	ldr	r2, [r13, #12]
+int3	dcd 6
+	ldr	r3, =int0
+	ldr	r1, [r3]
+	ldr	r2, =int3
+	ldr	r2, [r2]
 	add	r0, r1, r2
-	str	r0, [r13, #0]
+	str	r0, [r3]
 
-	mov	r0, #5
-	str	r0, [r13, #16]
-
-	ldr	r1, [r13, #0]
-	ldr	r2, [r13, #16]
+int4	dcd 5
+	ldr	r3, =int0
+	ldr	r1, [r3]
+	ldr	r2, =int4
+	ldr	r2, [r2]
 	add	r0, r1, r2
-	str	r0, [r13, #0]
+	str	r0, [r3]
 
-	mov	r0, #4
-	str	r0, [r13, #20]
-
-	ldr	r1, [r13, #0]
-	ldr	r2, [r13, #20]
+int5	dcd 4
+	ldr	r3, =int0
+	ldr	r1, [r3]
+	ldr	r2, =int5
+	ldr	r2, [r2]
 	add	r0, r1, r2
-	str	r0, [r13, #0]
+	str	r0, [r3]
 
-	mov	r0, #3
-	str	r0, [r13, #24]
-
-	ldr	r1, [r13, #0]
-	ldr	r2, [r13, #24]
+int6	dcd 3
+	ldr	r3, =int0
+	ldr	r1, [r3]
+	ldr	r2, =int6
+	ldr	r2, [r2]
 	add	r0, r1, r2
-	str	r0, [r13, #0]
+	str	r0, [r3]
 
-	mov	r0, #2
-	str	r0, [r13, #28]
-
-	ldr	r1, [r13, #0]
-	ldr	r2, [r13, #28]
+int7	dcd 2
+	ldr	r3, =int0
+	ldr	r1, [r3]
+	ldr	r2, =int7
+	ldr	r2, [r2]
 	add	r0, r1, r2
-	str	r0, [r13, #0]
+	str	r0, [r3]
 
-	mov	r0, #1
-	str	r0, [r13, #32]
-
-	ldr	r1, [r13, #0]
-	ldr	r2, [r13, #32]
+int8	dcd 1
+	ldr	r3, =int0
+	ldr	r1, [r3]
+	ldr	r2, =int8
+	ldr	r2, [r2]
 	add	r0, r1, r2
-	str	r0, [r13, #0]
+	str	r0, [r3]
 
 end
-mult
-	mov	r0, #0
-mult_loop
-	add	r0, r0, r1
-	sub	r2, r2, #1
-	cmp	r2, #0
-	bne	mult_loop
-	mov	pc, lr
-
-

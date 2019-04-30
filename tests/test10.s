@@ -1,5 +1,13 @@
-int0	dcd 12
-int1	dcd 123
+int0	dcd -2
+int1	dcd 3
+int2	dcd -1
+	ldr	r3, =int1
+	ldr	r1, [r3]
+	ldr	r2, =int2
+	ldr	r2, [r2]
+	bl	mult
+	str	r0, [r3]
+
 	ldr	r3, =int0
 	ldr	r1, [r3]
 	ldr	r2, =int1
@@ -7,16 +15,8 @@ int1	dcd 123
 	add	r0, r1, r2
 	str	r0, [r3]
 
-int2	dcd 45
-	ldr	r3, =int0
-	ldr	r1, [r3]
-	ldr	r2, =int2
-	ldr	r2, [r2]
-	add	r0, r1, r2
-	str	r0, [r3]
-
-int3	dcd 135
-int4	dcd 12
+int3	dcd -4
+int4	dcd -5
 	ldr	r3, =int3
 	ldr	r1, [r3]
 	ldr	r2, =int4
@@ -27,14 +27,6 @@ int4	dcd 12
 	ldr	r3, =int0
 	ldr	r1, [r3]
 	ldr	r2, =int3
-	ldr	r2, [r2]
-	add	r0, r1, r2
-	str	r0, [r3]
-
-int5	dcd 42
-	ldr	r3, =int0
-	ldr	r1, [r3]
-	ldr	r2, =int5
 	ldr	r2, [r2]
 	add	r0, r1, r2
 	str	r0, [r3]

@@ -1,3 +1,4 @@
+
 %{
 #include <stdio.h>
 
@@ -25,22 +26,18 @@ PROGRAMA:
 EXPRESSAO:
     INT { 
 	//printf("@Inteiro: %d", i_memoria); 	
-	printf("int%d	dcd %d\n", i_memoria, $1); 	
-	//printf("	ldr	r0, =int%d\n", i_memoria); 	
-	//printf("	ldr	r0, [r0]\n"); 	
-	//printf("	str	r0, [r13, #%d]\n\n", i_memoria); 	
+	printf("	mov	r0, #%d\n", $1); 	
+	printf("	str	r0, [r13, #%d]\n\n", i_memoria); 	
 	$$ = i_memoria;
-	i_memoria+=1;
+	i_memoria+=4;
           }
 
 	|MINUS INT{
 	//printf("@Inteiro: %d", i_memoria); 	
-	printf("int%d	dcd -%d\n", i_memoria, $2); 	
-	//printf("	ldr	r0, =int%d\n", i_memoria); 	
-	//printf("	ldr	r0, [r0]\n"); 	
-	//printf("	str	r0, [r13, #%d]\n\n", i_memoria); 	
+	printf("	mov	r0, #-%d\n", $2); 	
+	printf("	str	r0, [r13, #%d]\n\n", i_memoria); 	
 	$$ = i_memoria;
-	i_memoria+=1;
+	i_memoria+=4;
           }
 
     | OPARENT EXPRESSAO FPARENT {
@@ -49,33 +46,27 @@ EXPRESSAO:
 
     | EXPRESSAO SOMA EXPRESSAO  {
         $$ = $1;
-	printf("	ldr	r3, =int%d\n", $1); 	
-	printf("	ldr	r1, [r3]\n"); 	
-	printf("	ldr	r2, =int%d\n", $3); 	
-	printf("	ldr	r2, [r2]\n"); 	
+	printf("	ldr	r1, [r13, #%d]\n", $1); 	
+	printf("	ldr	r2, [r13, #%d]\n", $3); 	
 	printf("	add	r0, r1, r2\n"); 	
-	printf("	str	r0, [r3]\n\n"); 	
+	printf("	str	r0, [r13, #%d]\n\n", $1); 	
         }
 
     | EXPRESSAO MINUS EXPRESSAO  {
         $$ = $1;
-	printf("	ldr	r3, =int%d\n", $1); 	
-	printf("	ldr	r1, [r3]\n"); 	
-	printf("	ldr	r2, =int%d\n", $3); 	
-	printf("	ldr	r2, [r2]\n"); 	
+	printf("	ldr	r1, [r13, #%d]\n", $1); 	
+	printf("	ldr	r2, [r13, #%d]\n", $3); 	
 	printf("	sub	r0, r1, r2\n"); 	
-	printf("	str	r0, [r3]\n\n"); 	
+	printf("	str	r0, [r13, #%d]\n\n", $1); 	
         }
  
     | EXPRESSAO MULT EXPRESSAO  {
         $$ = $1;
 	mult=1;
-	printf("	ldr	r3, =int%d\n", $1); 	
-	printf("	ldr	r1, [r3]\n"); 	
-	printf("	ldr	r2, =int%d\n", $3); 	
-	printf("	ldr	r2, [r2]\n"); 	
+	printf("	ldr	r1, [r13, #%d]\n", $1); 	
+	printf("	ldr	r2, [r13, #%d]\n", $3); 	
 	printf("	bl	mult\n"); 	
-	printf("	str	r0, [r3]\n\n"); 	
+	printf("	str	r0, [r13, #%d]\n\n", $1); 	
         }
     ;
 
@@ -93,17 +84,17 @@ int main() {
 		printf("mult\n");
 		printf("	mov	r0, #0\n"); 	
 
-		printf("	mov	r4, #0		;r4 conta quantos numeros negativos ha\n"); 	
+		printf("	mov	r3, #0		;r3 conta quantos numeros negativos ha\n"); 	
 //positivo
 		printf("	cmp	r1, #0		;se r1 for negativo \n"); 	
 		printf("	sublt	r1, r1, #1	;inverte ele\n"); 	
 		printf("	mvnlt	r1, r1\n"); 	
-		printf("	addlt	r4, r4, #1\n"); 	
+		printf("	addlt	r3, r3, #1\n"); 	
 //positivo
 		printf("	cmp	r2, #0		;se r2 for negativo \n");
 		printf("	sublt	r2, r2, #1	;inverte ele\n"); 	
 		printf("	mvnlt	r2, r2\n");
-		printf("	addlt	r4, r4, #1\n"); 	
+		printf("	addlt	r3, r3, #1\n"); 	
 
 		printf("mult_loop\n");
 		printf("	add	r0, r0, r1\n"); 	
@@ -111,7 +102,7 @@ int main() {
 		printf("	cmp	r2, #0\n"); 	
 		printf("	bne	mult_loop\n"); 	
 
-		printf("	cmp	r4, #1		;se apenas um dos operandos\n"); 	
+		printf("	cmp	r3, #1		;se apenas um dos operandos\n"); 	
 		printf("	mvneq	r0, r0		;for negativo, nega o resultado\n"); 	
 		printf("	addeq	r0, r0, #1\n"); 	
 
