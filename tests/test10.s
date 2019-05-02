@@ -1,35 +1,37 @@
-int0	dcd -2
-int1	dcd 3
-int2	dcd -1
-	ldr	r3, =int1
-	ldr	r1, [r3]
-	ldr	r2, =int2
-	ldr	r2, [r2]
+	ldr	r0, =-2
+	str	r0, [r13, #0]
+
+	ldr	r0, =3
+	str	r0, [r13, #4]
+
+	ldr	r0, =-1
+	str	r0, [r13, #8]
+
+	ldr	r1, [r13, #4]
+	ldr	r2, [r13, #8]
 	bl	mult
-	str	r0, [r3]
+	str	r0, [r13, #4]
 
-	ldr	r3, =int0
-	ldr	r1, [r3]
-	ldr	r2, =int1
-	ldr	r2, [r2]
+	ldr	r1, [r13, #0]
+	ldr	r2, [r13, #4]
 	add	r0, r1, r2
-	str	r0, [r3]
+	str	r0, [r13, #0]
 
-int3	dcd -4
-int4	dcd -5
-	ldr	r3, =int3
-	ldr	r1, [r3]
-	ldr	r2, =int4
-	ldr	r2, [r2]
+	ldr	r0, =-4
+	str	r0, [r13, #12]
+
+	ldr	r0, =-5
+	str	r0, [r13, #16]
+
+	ldr	r1, [r13, #12]
+	ldr	r2, [r13, #16]
 	bl	mult
-	str	r0, [r3]
+	str	r0, [r13, #12]
 
-	ldr	r3, =int0
-	ldr	r1, [r3]
-	ldr	r2, =int3
-	ldr	r2, [r2]
+	ldr	r1, [r13, #0]
+	ldr	r2, [r13, #12]
 	add	r0, r1, r2
-	str	r0, [r3]
+	str	r0, [r13, #0]
 
 end
 mult
@@ -40,6 +42,8 @@ mult
 	mvnlt	r1, r1
 	addlt	r4, r4, #1
 	cmp	r2, #0		;se r2 for negativo 
+	moveq	r0,#0	;Se for zera r0.
+	moveq	pc, lr	;retorna sem realizar mult_loop
 	sublt	r2, r2, #1	;inverte ele
 	mvnlt	r2, r2
 	addlt	r4, r4, #1
